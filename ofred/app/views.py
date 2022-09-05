@@ -1,8 +1,7 @@
 from flask import render_template, g
+from flask_appbuilder import ModelView
 from flask_appbuilder.models.filters import BaseFilter
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from flask_appbuilder import ModelView
-
 from sqlalchemy import or_
 
 from app import appbuilder, db
@@ -73,8 +72,6 @@ class EventsModelView(ModelView):
             {"fields": list_columns, "expanded": False}
         )
     ]
-
-
 
 
 @appbuilder.app.errorhandler(404)

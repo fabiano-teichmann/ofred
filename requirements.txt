@@ -3,3 +3,6 @@ flask-appbuilder
 Fernet
 cryptography
 psycopg2-binary
+kombu
+pika
+redis
