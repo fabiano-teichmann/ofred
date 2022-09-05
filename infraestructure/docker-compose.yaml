@@ -1,0 +1,85 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+---
+version: '3.9'
+x-alfred-common:
+
+  # In order to add custom dependencies or upgrade provider packages you can use your extended image.
+  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
+  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
+
+  # build: .
+  environment:
+    OFRED__SQL_ALCHEMY_CONN: postgresql+psycopg2://ofred:ofred@postgres/ofred
+    OFRED__REDIS_URL: redis://:@redis:6379/0
+    OFRED_CORE__FERNET_KEY: ''
+    OFRED__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    0FRED__API__AUTH_BACKEND: 'ofred.api.auth.backend.basic_auth'
+
+  volumes:
+    - ./logs:/opt/ofred/logs
+    - ./data:/opt/ofred/data
+  user: "${OFRED_UID:-50000}:0"
+  depends_on:
+    &alfred-common-depends-on
+    redis:
+      condition: service_healthy
+    postgres:
+      condition: service_healthy
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq/
+
+    networks:
+      - ofred_net
+
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ofred
+      POSTGRES_PASSWORD: ofred
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    networks:
+      - ofred_net
+
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:latest
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+
+    networks:
+      - ofred_net
+
+
+volumes:
+  postgres-db-volume:
+  rabbitmq_data:
+  rabbitmq_log:
+
+networks:
+  ofred_net:
+    driver: bridge

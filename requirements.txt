@@ -1,0 +1,5 @@
+flask
+flask-appbuilder
+Fernet
+cryptography
+psycopg2-binary
