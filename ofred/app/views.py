@@ -1,5 +1,5 @@
-from flask import render_template, g
-from flask_appbuilder import ModelView
+from flask import render_template, g, redirect
+from flask_appbuilder import ModelView, action
 from flask_appbuilder.models.filters import BaseFilter
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from sqlalchemy import or_
@@ -28,6 +28,14 @@ class CustomAdminFilter(BaseFilter):
 
 
 class ApplicationsModelView(ModelView):
+    @action("myaction", "Do something on this record", "Do you really want to?", "fa-rocket")
+    def myaction(self, item):
+        """
+            do something with the item record
+        """
+
+        return redirect(self.get_redirect())
+
     datamodel = SQLAInterface(Applications)
     label_columns = {"applications": "Applications"}
     list_columns = ["name", "description"]
@@ -73,6 +81,13 @@ class EventsModelView(ModelView):
         )
     ]
 
+    def pre_add(self, item):
+        print('pre save')
+
+    def post_add_redirect(self):
+        print('Salvou')
+        return redirect(self.get_redirect())
+
 
 @appbuilder.app.errorhandler(404)
 def page_not_found(e):
@@ -106,5 +121,3 @@ appbuilder.add_view(
     category="Events",
     category_icon="fa fa-file-code-o"
 )
-
-

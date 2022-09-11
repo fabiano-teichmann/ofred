@@ -1,7 +1,6 @@
 from flask_appbuilder import Model
 from flask_appbuilder.models.mixins import AuditMixin
-from sqlalchemy import Column, Integer, String, ForeignKey, ARRAY, Text
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
 
@@ -22,6 +21,7 @@ class Applications(BaseModel, AuditMixin, Model):
 
 
 class Events(BaseModel, AuditMixin, Model):
+    req_path = Column(String, nullable=True)
     application_id = Column(Integer, ForeignKey(Applications.id))
     application_tbl = relationship('Applications', foreign_keys='Events.application_id')
     domain_id = Column(Integer, ForeignKey(Domains.id))

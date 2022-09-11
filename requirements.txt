@@ -6,3 +6,4 @@ psycopg2-binary
 kombu
 pika
 redis
+aio-pika

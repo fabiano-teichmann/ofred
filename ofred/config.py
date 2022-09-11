@@ -1,10 +1,7 @@
 import os
+
 from flask_appbuilder.security.manager import (
-    AUTH_OID,
-    AUTH_REMOTE_USER,
     AUTH_DB,
-    AUTH_LDAP,
-    AUTH_OAUTH,
 )
 
 from settings import Settings
@@ -23,7 +20,7 @@ SQLALCHEMY_DATABASE_URI = f'postgresql://{settings.user_postgres}:{settings.pass
 
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True
-
+FAB_API_SWAGGER_UI = True
 # ------------------------------
 # GLOBALS FOR APP Builder
 # ------------------------------
