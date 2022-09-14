@@ -7,3 +7,6 @@ kombu
 pika
 redis
 aio-pika
+pydantic
+pytest
+pytest-cov
