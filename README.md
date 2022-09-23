@@ -6,3 +6,10 @@ But companies need create protection to not send information PII (Personal Ident
 in to ELK or Datadog etc. This data need be anonymize or encrypted. Ofred burn with propose simplify
 this process. Apply encrypted data. And with application web is easy manager permission and governance
 data.
+
+# Create user admin
+
+In folder ofred/scr/web run command
+
+    flask fab create-admin
+

@@ -10,3 +10,4 @@ aio-pika
 pydantic
 pytest
 pytest-cov
+elasticsearch[async]
